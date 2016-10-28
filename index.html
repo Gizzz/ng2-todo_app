@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Angular QuickStart</title>
+    <title>Todo App</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+    <!--<link rel="stylesheet" href="styles.css">-->
 
     <!-- Polyfill(s) for older browsers -->
     <script src="node_modules/core-js/client/shim.min.js"></script>
@@ -21,5 +24,15 @@
 
   <body>
     <my-app>Loading...</my-app>
+    
+		<footer class="info">
+			<p>Double-click to edit a todo</p>
+			<!-- Change this out with your name and url ↓ -->
+			<p>Created by <a href="https://github.com/Gizzz">Gizz</a></p>
+			<p>Inspired by <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+    
+		<!-- Scripts here. Don't remove ↓ -->
+		<!--<script src="node_modules/todomvc-common/base.js"></script>-->
   </body>
 </html>
