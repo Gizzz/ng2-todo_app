@@ -24,6 +24,10 @@ export class TodoDataService {
 		return this.todos;
 	}
 
+	toggleCompletedForAll(value: boolean): void {
+		this.todos.forEach(item => item.completed = value);
+	}
+
 	create(title: string): void {
 		title = title.trim();
 		if (!title) return;
@@ -47,12 +51,17 @@ export class TodoDataService {
 		this.todos.push(todoToCreate);
 	}
 
-	delete(id: number): void {
+	deleteById(id: number): void {
 		let todoToDelete = this.todos.filter(item => item.id === id)[0];
 
 		if (todoToDelete) {
 			let index = this.todos.indexOf(todoToDelete);
 			this.todos.splice(index, 1)
 		}
+	}
+	
+	deleteCompleted(): void {
+		let completedTodos = this.todos.filter(item => item.completed);
+		completedTodos.forEach(todo => this.deleteById(todo.id));
 	}
 }

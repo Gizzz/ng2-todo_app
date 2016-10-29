@@ -2,17 +2,24 @@
 	<header class="header">
 		<h1>todos</h1>
 		<input class="new-todo" placeholder="What needs to be done?" autofocus 
-			#newTodo (keyup.enter)="createTodo(newTodo.value); newTodo.value='';">
+			#newTodo 
+			(keyup.enter)="createTodo(newTodo.value); newTodo.value='';"
+			(blur)="createTodo(newTodo.value); newTodo.value='';">
 	</header>
-	<!-- This section should be hidden by default and shown when there are todos -->
-	<section class="main">
-		<input class="toggle-all" type="checkbox">
+	<section class="main" *ngIf="todos.length">
+		<input class="toggle-all" type="checkbox" 
+			#toggleAll
+			[ngModel]="toggleAll_controlState"
+			(ngModelChange)="toggleAllTodosCompletedState(toggleAll.checked)">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul class="todo-list">
-			<li *ngFor="let todo of todos">
-				<input type="checkbox" class="toggle" [(ngModel)]="todo.completed">
-				<label>{{ todo.title }} {{ todo.id }}</label>
-				<button class="destroy" (click)="deleteTodo(todo.id)"></button>
+			<li *ngFor="let todo of todos" [ngClass]="{completed: todo.completed}">
+				<div class="view">
+					<input type="checkbox" class="toggle" [(ngModel)]="todo.completed">
+					<label>{{ todo.title }}</label>
+					<button class="destroy" (click)="deleteTodo(todo.id)"></button>
+				</div>
+				<input class="edit" value="Create a TodoMVC template">
 			</li>
 
 			<!-- These are here just to show the structure of the list items -->
@@ -35,10 +42,10 @@
 			</li>-->
 		</ul>
 	</section>
-	<!-- This footer should hidden by default and shown when there are todos -->
-	<footer class="footer">
-		<!-- This should be `0 items left` by default -->
-		<span class="todo-count"><strong>0</strong> item left</span>
+	<footer class="footer" *ngIf="todos.length">
+		<span class="todo-count">
+			{{ todosLeft_countText }}
+		</span>
 		<!-- Remove this if you don't implement routing -->
 		<ul class="filters">
 			<li>
@@ -51,7 +58,10 @@
 				<a href="#/completed">Completed</a>
 			</li>
 		</ul>
-		<!-- Hidden if no completed items are left ↓ -->
-		<button class="clear-completed">Clear completed</button>
+		<button class="clear-completed" 
+			*ngIf="completedTodosCount" 
+			(click)="deleteCompletedTodos()">
+			Clear completed
+		</button>
 	</footer>
 </section>
