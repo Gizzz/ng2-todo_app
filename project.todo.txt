@@ -1,13 +1,11 @@
 list of tasks for the project
 
 features:
-- routing
 - editing
 - local storage
+- make todos observable
 - decompose to components
 
 bugs:
-- when toggle state of item at active/completed - it is not disappear 
-		(not move to appropreate page)
-- items cannot be removed from active/completed pages
+-
 

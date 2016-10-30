@@ -15,7 +15,9 @@
 		<ul class="todo-list">
 			<li *ngFor="let todo of todos" [ngClass]="{completed: todo.completed}">
 				<div class="view">
-					<input type="checkbox" class="toggle" [(ngModel)]="todo.completed">
+					<input type="checkbox" class="toggle" 
+						[ngModel]="todo.completed" 
+						(ngModelChange)="todo.completed = $event; onTodoStateToggle()">
 					<label>{{ todo.title }}</label>
 					<button class="destroy" (click)="deleteTodo(todo.id)"></button>
 				</div>

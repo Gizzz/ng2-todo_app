@@ -11,6 +11,7 @@ import { TodoDataService } from './todo-data.service';
 })
 export class TodosComponent implements OnInit {
 	todos: Todo[];
+	private filter: string; 
 
 	constructor(
 		private todoDataService: TodoDataService,
@@ -19,13 +20,13 @@ export class TodosComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		let filter: string = "";
+		this.filter = "";
 
 		if (this.route.snapshot.url.length) {
-			filter = this.route.snapshot.url[0].path;
+			this.filter = this.route.snapshot.url[0].path;
 		}
 
-		this.todos = this.todoDataService.getTodos(filter);
+		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
 	// header
@@ -45,10 +46,16 @@ export class TodosComponent implements OnInit {
 
 	deleteTodo(id: number): void {
 		this.todoDataService.deleteById(id); 
+		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
 	createTodo(title: string): void {
 		this.todoDataService.create(title); 
+		this.todos = this.todoDataService.getTodos(this.filter);
+	}
+
+	onTodoStateToggle(): void {
+		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
 	// footer
