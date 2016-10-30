@@ -3,6 +3,8 @@ import { FormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule }   from '@angular/router';
 
+import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent }  from './app.component';
 import { TodosComponent }  from './todos/todos.component';
 import { TodoDataService } from './todos/todo-data.service';
@@ -11,12 +13,7 @@ import { TodoDataService } from './todos/todo-data.service';
   imports: [ 
     BrowserModule, 
     FormsModule,
-    RouterModule.forRoot([
-      { path: '',  component: TodosComponent },
-      { path: 'active', component: TodosComponent },
-      { path: 'completed', component: TodosComponent },
-      // { path: '**', redirectTo: 'all' },
-    ]),
+    AppRoutingModule,
   ], 
   declarations: [ 
     AppComponent, 
