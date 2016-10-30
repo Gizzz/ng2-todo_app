@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { Todo } from './todo.model';
 import { TodoDataService } from './todo-data.service';
@@ -6,14 +7,25 @@ import { TodoDataService } from './todo-data.service';
 @Component({
 	moduleId: module.id,
 	selector: 'my-todos',
-	templateUrl: 'todos.component.html',
-	providers: [TodoDataService],
+	templateUrl: 'todos.component.html',	
 })
-export class TodosComponent {
+export class TodosComponent implements OnInit {
 	todos: Todo[];
 
-	constructor(private todoDataService: TodoDataService) {
-		this.todos = todoDataService.getTodos();
+	constructor(
+		private todoDataService: TodoDataService,
+		private route: ActivatedRoute,
+		private router: Router
+	) { }
+
+	ngOnInit() {
+		let filter: string = "";
+
+		if (this.route.snapshot.url.length) {
+			filter = this.route.snapshot.url[0].path;
+		}
+
+		this.todos = this.todoDataService.getTodos(filter);
 	}
 
 	// header

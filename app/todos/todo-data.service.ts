@@ -20,9 +20,24 @@ export class TodoDataService {
 		];
 	}
 
-	getTodos(): Todo[] {
-		return this.todos;
+	getTodos(filter?: string): Todo[] {
+		if (!filter) {
+			return this.todos;
+		} else if (filter === "active") {
+			return this.todos.filter(t => t.completed === false);
+		} else if (filter === "completed") {
+			return this.todos.filter(t => t.completed === true);
+		} else {
+			throw new Error("unexpected argument value");
+		}
 	}
+
+	// todo: use in component
+
+	// getActiveTodosCount(): number {
+	// 	let activeTodos = this.todos.filter(t => t.completed === false);
+	// 	return activeTodos.length;
+	// }
 
 	toggleCompletedForAll(value: boolean): void {
 		this.todos.forEach(item => item.completed = value);

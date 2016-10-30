@@ -49,13 +49,16 @@
 		<!-- Remove this if you don't implement routing -->
 		<ul class="filters">
 			<li>
-				<a class="selected" href="#/">All</a>
+				<a routerLink="/" routerLinkActive="selected" 
+					[routerLinkActiveOptions]="{ exact: true }">
+					All
+				</a>
 			</li>
 			<li>
-				<a href="#/active">Active</a>
+				<a routerLink="/active" routerLinkActive="selected">Active</a>
 			</li>
 			<li>
-				<a href="#/completed">Completed</a>
+				<a routerLink="/completed" routerLinkActive="selected">Completed</a>
 			</li>
 		</ul>
 		<button class="clear-completed" 
