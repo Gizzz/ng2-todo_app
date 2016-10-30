@@ -6,7 +6,7 @@
 			(keyup.enter)="createTodo(newTodo.value); newTodo.value='';"
 			(blur)="createTodo(newTodo.value); newTodo.value='';">
 	</header>
-	<section class="main" *ngIf="todos.length">
+	<section class="main" *ngIf="overallTodosCount">
 		<input class="toggle-all" type="checkbox" 
 			#toggleAll
 			[ngModel]="toggleAll_controlState"
@@ -42,7 +42,7 @@
 			</li>-->
 		</ul>
 	</section>
-	<footer class="footer" *ngIf="todos.length">
+	<footer class="footer" *ngIf="overallTodosCount">
 		<span class="todo-count">
 			{{ todosLeft_countText }}
 		</span>

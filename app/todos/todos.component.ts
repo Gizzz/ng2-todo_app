@@ -54,13 +54,17 @@ export class TodosComponent implements OnInit {
 	// footer
 
 	get todosLeft_countText(): string {
-		let activeTodosCount = this.todoDataService.getActiveTodosCount();
+		let activeTodosCount = this.todoDataService.getTodosCount("active");
 		let supportText = activeTodosCount === 1 ? "item" : "items";
 		return `${activeTodosCount} ${supportText} left`;
 	}
 
 	get completedTodosCount(): number {
-		return this.todoDataService.getCompletedTodosCount();
+		return this.todoDataService.getTodosCount("completed");
+	}
+
+	get overallTodosCount(): number {
+		return this.todoDataService.getTodosCount();
 	}
 
 	deleteCompletedTodos(): void {

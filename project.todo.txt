@@ -4,10 +4,10 @@ features:
 - routing
 - editing
 - local storage
+- decompose to components
 
 bugs:
 - when toggle state of item at active/completed - it is not disappear 
-	(not move to appropreate page)
+		(not move to appropreate page)
 - items cannot be removed from active/completed pages
-- when zero items on active/completed page, but there are items on all page - main and footer 
-	should stay visible
+

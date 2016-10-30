@@ -32,16 +32,20 @@ export class TodoDataService {
 		}
 	}
 
-	// todo: use in component
+	getTodosCount(filter: string = "") {
+		if (!filter) return this.todos.length;
 
-	getActiveTodosCount(): number {
-		let activeTodos = this.todos.filter(t => t.completed === false);
-		return activeTodos.length;
-	}
+		let filteredTodos: Todo[];
 
-	getCompletedTodosCount(): number {
-		let completedTodos = this.todos.filter(t => t.completed === true);
-		return completedTodos.length;
+		if (filter === "active") {
+			filteredTodos = this.todos.filter(t => t.completed === false);
+		} else if (filter === "completed") {
+			filteredTodos = this.todos.filter(t => t.completed === true);
+		} else {
+			throw new Error("unexpected filter value");
+		}
+
+		return filteredTodos.length;
 	}
 
 	toggleCompletedForAll(value: boolean): void {
