@@ -34,10 +34,15 @@ export class TodoDataService {
 
 	// todo: use in component
 
-	// getActiveTodosCount(): number {
-	// 	let activeTodos = this.todos.filter(t => t.completed === false);
-	// 	return activeTodos.length;
-	// }
+	getActiveTodosCount(): number {
+		let activeTodos = this.todos.filter(t => t.completed === false);
+		return activeTodos.length;
+	}
+
+	getCompletedTodosCount(): number {
+		let completedTodos = this.todos.filter(t => t.completed === true);
+		return completedTodos.length;
+	}
 
 	toggleCompletedForAll(value: boolean): void {
 		this.todos.forEach(item => item.completed = value);
