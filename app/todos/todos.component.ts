@@ -40,6 +40,7 @@ export class TodosComponent implements OnInit {
 
 	toggleAllTodosCompletedState(value: boolean) {
 		this.todoDataService.toggleCompletedForAll(value);
+		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
 	// main
@@ -76,5 +77,6 @@ export class TodosComponent implements OnInit {
 
 	deleteCompletedTodos(): void {
 		this.todoDataService.deleteCompleted(); 
+		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 }
