@@ -10,5 +10,4 @@ bugs:
 - when toggle state of item at active/completed - it is not disappear 
 		(not move to appropreate page)
 - items cannot be removed from active/completed pages
-- fix toggleAll behavior
 

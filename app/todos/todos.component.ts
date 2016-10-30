@@ -32,7 +32,7 @@ export class TodosComponent implements OnInit {
 
 	get toggleAll_controlState(): boolean {
 		let isAllTodosCompleted: boolean = 
-			this.todos.filter(item => item.completed).length === this.todos.length;
+			this.todoDataService.getTodosCount("completed") === this.todoDataService.getTodosCount();
 
 		return isAllTodosCompleted;
 	}
