@@ -59,6 +59,34 @@ export class TodosComponent implements OnInit {
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
+	startTodoEditing(todo: any): void {
+		todo.editing = true;
+
+		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
+		setTimeout(() => { inputElement.focus(); })
+	}
+
+	saveEditingChanges(todo: any): void {
+		todo.editing = false;
+
+		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
+		let newValue: string = inputElement.value.trim()
+
+		if (newValue) {
+			todo.title = newValue;
+			inputElement.value = todo.title;
+		} else {
+			this.todoDataService.deleteById(todo.id);
+		}
+	}
+
+	discardEditingChanges(todo: any): void {
+		todo.editing = false;
+
+		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
+		inputElement.value = todo.title;
+	}
+
 	// footer
 
 	get todosLeft_countText(): string {

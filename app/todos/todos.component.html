@@ -13,15 +13,19 @@
 			(ngModelChange)="toggleAllTodosCompletedState(toggleAll.checked)">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul class="todo-list">
-			<li *ngFor="let todo of todos" [ngClass]="{completed: todo.completed}">
+			<li *ngFor="let todo of todos" [ngClass]="{completed: todo.completed, editing: todo.editing}">
 				<div class="view">
 					<input type="checkbox" class="toggle" 
 						[ngModel]="todo.completed" 
 						(ngModelChange)="todo.completed = $event; onTodoStateToggle()">
-					<label>{{ todo.title }}</label>
+					<label (dblclick)="startTodoEditing(todo)">{{ todo.title }}</label>
 					<button class="destroy" (click)="deleteTodo(todo.id)"></button>
 				</div>
-				<input class="edit" value="Create a TodoMVC template">
+				<input class="edit input-{{ todo.id }}" value="{{ todo.title }}"
+					(keyup.enter)="saveEditingChanges(todo)" 
+					(blur)="saveEditingChanges(todo)"
+					(keyup.escape)="discardEditingChanges(todo)"
+					>
 			</li>
 
 			<!-- These are here just to show the structure of the list items -->

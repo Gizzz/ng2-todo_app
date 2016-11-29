@@ -1,11 +1,14 @@
 list of tasks for the project
 
 features:
-- editing
 - local storage
 - make todos observable
 - decompose to components
 
 bugs:
 -
+
+-todo editing: direct references to input element
+-todo editing: todo item stores editing state, which is appropriate for viewModel, 
+	but not appropriate for Model 
 
