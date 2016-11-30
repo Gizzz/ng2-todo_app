@@ -28,28 +28,6 @@
 			</li>
 		</ul>
 	</section>
-	<footer class="footer" *ngIf="overallTodosCount">
-		<span class="todo-count">
-			{{ todosLeft_countText }}
-		</span>
-		<ul class="filters">
-			<li>
-				<a routerLink="/" routerLinkActive="selected" 
-					[routerLinkActiveOptions]="{ exact: true }">
-					All
-				</a>
-			</li>
-			<li>
-				<a routerLink="/active" routerLinkActive="selected">Active</a>
-			</li>
-			<li>
-				<a routerLink="/completed" routerLinkActive="selected">Completed</a>
-			</li>
-		</ul>
-		<button class="clear-completed" 
-			*ngIf="completedTodosCount" 
-			(click)="deleteCompletedTodos()">
-			Clear completed
-		</button>
-	</footer>
+	
+	<my-todos-footer *ngIf="overallTodosCount" (destroyCompletedTodos)="refreshTodos()"></my-todos-footer>
 </section>

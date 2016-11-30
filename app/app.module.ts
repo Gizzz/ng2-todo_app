@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent }  from './app.component';
 import { TodosComponent }  from './todos/todos.component';
+import { TodosFooterComponent }  from './todos/todos-footer/todos-footer.component';
 import { TodoDataService } from './todos/todo-data.service';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { TodoDataService } from './todos/todo-data.service';
   ], 
   declarations: [ 
     AppComponent, 
-    TodosComponent 
+    TodosComponent,
+    TodosFooterComponent,
   ],
   providers: [TodoDataService],
   bootstrap: [ AppComponent ]

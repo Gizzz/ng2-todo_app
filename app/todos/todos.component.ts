@@ -45,6 +45,10 @@ export class TodosComponent implements OnInit {
 
 	// main
 
+	get overallTodosCount(): number {
+		return this.todoDataService.getTodosCount();
+	}
+
 	deleteTodo(id: number): void {
 		this.todoDataService.deleteById(id); 
 		this.todos = this.todoDataService.getTodos(this.filter);
@@ -87,24 +91,8 @@ export class TodosComponent implements OnInit {
 		inputElement.value = todo.title;
 	}
 
-	// footer
 
-	get todosLeft_countText(): string {
-		let activeTodosCount = this.todoDataService.getTodosCount("active");
-		let supportText = activeTodosCount === 1 ? "item" : "items";
-		return `${activeTodosCount} ${supportText} left`;
-	}
-
-	get completedTodosCount(): number {
-		return this.todoDataService.getTodosCount("completed");
-	}
-
-	get overallTodosCount(): number {
-		return this.todoDataService.getTodosCount();
-	}
-
-	deleteCompletedTodos(): void {
-		this.todoDataService.deleteCompleted(); 
+	refreshTodos(): void {
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 }
