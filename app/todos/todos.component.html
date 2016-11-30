@@ -24,35 +24,14 @@
 				<input class="edit input-{{ todo.id }}" value="{{ todo.title }}"
 					(keyup.enter)="saveEditingChanges(todo)" 
 					(blur)="saveEditingChanges(todo)"
-					(keyup.escape)="discardEditingChanges(todo)"
-					>
+					(keyup.escape)="discardEditingChanges(todo)">
 			</li>
-
-			<!-- These are here just to show the structure of the list items -->
-			<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-			<!--<li class="completed">
-				<div class="view">
-					<input class="toggle" type="checkbox" checked>
-					<label>Taste JavaScript</label>
-					<button class="destroy"></button>
-				</div>
-				<input class="edit" value="Create a TodoMVC template">
-			</li>
-			<li>
-				<div class="view">
-					<input class="toggle" type="checkbox">
-					<label>Buy a unicorn</label>
-					<button class="destroy"></button>
-				</div>
-				<input class="edit" value="Rule the web">
-			</li>-->
 		</ul>
 	</section>
 	<footer class="footer" *ngIf="overallTodosCount">
 		<span class="todo-count">
 			{{ todosLeft_countText }}
 		</span>
-		<!-- Remove this if you don't implement routing -->
 		<ul class="filters">
 			<li>
 				<a routerLink="/" routerLinkActive="selected" 
