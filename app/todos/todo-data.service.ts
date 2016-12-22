@@ -7,17 +7,7 @@ export class TodoDataService {
 	private todos: Todo[];
 	
 	constructor() {
-		this.todos = [
-			{
-				id: 1,
-				title: "first",
-				completed: true,
-			}, {
-				id: 2,
-				title: "second",
-				completed: false,
-			}
-		];
+		this.initializeItemsFromStorage();
 	}
 
 	getTodos(filter?: string): Todo[] {
@@ -50,6 +40,8 @@ export class TodoDataService {
 
 	toggleCompletedForAll(value: boolean): void {
 		this.todos.forEach(item => item.completed = value);
+		
+		this.updateStorageItems(this.todos);
 	}
 
 	create(title: string): void {
@@ -73,6 +65,7 @@ export class TodoDataService {
 		};
 
 		this.todos.push(todoToCreate);
+		this.updateStorageItems(this.todos);
 	}
 
 	deleteById(id: number): void {
@@ -82,10 +75,30 @@ export class TodoDataService {
 			let index = this.todos.indexOf(todoToDelete);
 			this.todos.splice(index, 1)
 		}
+
+		this.updateStorageItems(this.todos);
 	}
 	
 	deleteCompleted(): void {
 		let completedTodos = this.todos.filter(item => item.completed);
 		completedTodos.forEach(todo => this.deleteById(todo.id));
+
+		this.updateStorageItems(this.todos);
+	}
+
+	// storage functions
+
+	private initializeItemsFromStorage(): void {
+		const storageName = "todos-angular2";
+
+		if (!localStorage[storageName]) {
+			localStorage[storageName] = JSON.stringify([]);
+		} 
+
+		this.todos = JSON.parse(localStorage[storageName]);
+	}
+
+	private updateStorageItems(items: Todo[]): void {
+		localStorage["todos-angular2"] = JSON.stringify(items);
 	}
 }
