@@ -2,6 +2,8 @@ list of tasks for the project
 
 features:
 - local storage
+	- remove state sharing between todo component and service (1st step - deep clone for getTodos())
+- e2e tests
 - make todos observable
 - decompose to components
 
