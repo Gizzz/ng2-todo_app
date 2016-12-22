@@ -9,6 +9,7 @@ import { AppComponent }  from './app.component';
 import { TodosComponent }  from './todos/todos.component';
 import { TodosFooterComponent }  from './todos/todos-footer/todos-footer.component';
 import { TodoDataService } from './todos/todo-data.service';
+import { TodoStorageService } from './todos/todo-storage.service';
 
 @NgModule({
   imports: [ 
@@ -21,7 +22,7 @@ import { TodoDataService } from './todos/todo-data.service';
     TodosComponent,
     TodosFooterComponent,
   ],
-  providers: [TodoDataService],
+  providers: [ TodoDataService, TodoStorageService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

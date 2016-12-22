@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 
 import { Todo } from './todo.model';
+import { TodoStorageService } from './todo-storage.service';
 
 @Injectable()
 export class TodoDataService {
 	private todos: Todo[];
 	
-	constructor() {
-		this.initializeItemsFromStorage();
+	constructor(private todoStorageService: TodoStorageService) {
+		this.todos = todoStorageService.getTodos();
 	}
 
 	getTodos(filter?: string): Todo[] {
+		// let todos = this.todoStorageService.getTodos();
+
 		if (!filter) {
 			return this.todos;
 		} else if (filter === "active") {
@@ -41,7 +44,7 @@ export class TodoDataService {
 	toggleCompletedForAll(value: boolean): void {
 		this.todos.forEach(item => item.completed = value);
 		
-		this.updateStorageItems(this.todos);
+		this.todoStorageService.updateTodos(this.todos);
 	}
 
 	create(title: string): void {
@@ -65,7 +68,7 @@ export class TodoDataService {
 		};
 
 		this.todos.push(todoToCreate);
-		this.updateStorageItems(this.todos);
+		this.todoStorageService.updateTodos(this.todos);
 	}
 
 	deleteById(id: number): void {
@@ -76,29 +79,13 @@ export class TodoDataService {
 			this.todos.splice(index, 1)
 		}
 
-		this.updateStorageItems(this.todos);
+		this.todoStorageService.updateTodos(this.todos);
 	}
 	
 	deleteCompleted(): void {
 		let completedTodos = this.todos.filter(item => item.completed);
 		completedTodos.forEach(todo => this.deleteById(todo.id));
 
-		this.updateStorageItems(this.todos);
-	}
-
-	// storage functions
-
-	private initializeItemsFromStorage(): void {
-		const storageName = "todos-angular2";
-
-		if (!localStorage[storageName]) {
-			localStorage[storageName] = JSON.stringify([]);
-		} 
-
-		this.todos = JSON.parse(localStorage[storageName]);
-	}
-
-	private updateStorageItems(items: Todo[]): void {
-		localStorage["todos-angular2"] = JSON.stringify(items);
+		this.todoStorageService.updateTodos(this.todos);
 	}
 }
