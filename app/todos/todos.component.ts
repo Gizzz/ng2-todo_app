@@ -59,7 +59,8 @@ export class TodosComponent implements OnInit {
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
-	onTodoStateToggle(): void {
+	toggle_SingleTodo_CompletedState(id: number): void {
+		this.todoDataService.toggleCompletedById(id);
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 

@@ -5,6 +5,7 @@ import { TodoStorageService } from './todo-storage.service';
 
 @Injectable()
 export class TodoDataService {
+	// this.todos is ugly hack; otherwise, if reference to object changed, all related inputs miss the 1st click
 	private todos: Todo[];
 	
 	constructor(private todoStorageService: TodoStorageService) {
@@ -12,8 +13,6 @@ export class TodoDataService {
 	}
 
 	getTodos(filter?: string): Todo[] {
-		// let todos = this.todoStorageService.getTodos();
-
 		if (!filter) {
 			return this.todos;
 		} else if (filter === "active") {
@@ -39,6 +38,13 @@ export class TodoDataService {
 		}
 
 		return filteredTodos.length;
+	}
+
+	toggleCompletedById(id: number): void {
+		let todo = this.todos.filter(t => t.id === id)[0];
+		todo.completed = !todo.completed;
+
+		this.todoStorageService.updateTodos(this.todos);
 	}
 
 	toggleCompletedForAll(value: boolean): void {

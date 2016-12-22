@@ -17,7 +17,7 @@
 				<div class="view">
 					<input type="checkbox" class="toggle" 
 						[ngModel]="todo.completed" 
-						(ngModelChange)="todo.completed = $event; onTodoStateToggle()">
+						(ngModelChange)="toggle_SingleTodo_CompletedState(todo.id)">
 					<label (dblclick)="startTodoEditing(todo)">{{ todo.title }}</label>
 					<button class="destroy" (click)="deleteTodo(todo.id)"></button>
 				</div>
@@ -26,8 +26,8 @@
 					(blur)="saveEditingChanges(todo)"
 					(keyup.escape)="discardEditingChanges(todo)">
 			</li>
-		</ul>
-	</section>
+		</ul>		
+	</section>	
 	
 	<my-todos-footer *ngIf="overallTodosCount" (destroyCompletedTodos)="refreshTodos()"></my-todos-footer>
 </section>
