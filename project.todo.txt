@@ -1,8 +1,6 @@
 list of tasks for the project
 
 features:
-- local storage
-	- remove state sharing between todo component and service (1st step - deep clone for getTodos())
 - e2e tests
 - make todos observable
 - decompose to components
@@ -10,9 +8,10 @@ features:
 bugs:
 -
 
--todo editing: direct references to input element
--todo editing: todo item stores editing state, which is appropriate for viewModel, 
+hacks:
+- todo editing: direct references to input element
+- todo editing: todo item stores editing state, which is appropriate for viewModel, 
 	but not appropriate for Model 
--todo-data.service: find a way to eliminate this.todos hack (storing todos instance in service to prevent 
-	object reference change, see descr at file)
+- todo-data.service: find a way to eliminate this.todos hack (because of state sharing 
+	between todo component and service, see descr at file)
 
