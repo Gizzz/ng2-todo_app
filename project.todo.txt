@@ -2,8 +2,8 @@ list of tasks for the project
 
 features:
 - e2e tests
-- make todos observable
 - decompose to components
+- make todos observable
 
 bugs:
 -
