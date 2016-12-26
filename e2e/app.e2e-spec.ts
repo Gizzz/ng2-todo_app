@@ -1,16 +1,37 @@
-import { browser, element, by } from 'protractor';
+import { browser, element, by, protractor } from 'protractor';
 
-describe('QuickStart E2E Tests', function () {
-
-  let expectedMsg = 'My First Angular App';
-
-
+describe("TodoApp", function () {
   beforeEach(function () {
     browser.get('');
   });
 
-  it('should display: ' + expectedMsg, function () {
-    expect(element(by.css('h1')).getText()).toEqual(expectedMsg);
+  it("should create new todo", function () {
+    let mainSection = element(by.css("section.todoapp .main"));
+    expect(mainSection.isPresent()).toBe(false);
+
+    let newTodo = element(by.css("section.todoapp .new-todo"));
+    newTodo.sendKeys("tst");
+    newTodo.sendKeys(protractor.Key.ENTER);
+
+    let todos = element.all(by.css("section.todoapp .todo-list li"));
+    expect(todos.last().getText()).toContain("tst");
   });
 
+  it("should remove todo", function () {
+    let todos = element.all(by.css("section.todoapp .todo-list li"));
+    expect(todos.count()).toBe(1);
+
+    let mainSection = element(by.css("section.todoapp .main"));
+    expect(mainSection.isPresent()).toBe(true);
+
+    let todo = element(by.css(".todo-list li"));
+    let todoToRemove = browser.findElement(by.css(".todo-list li"));
+    // perform hover
+    browser.actions()
+      .mouseMove(todoToRemove)
+      .perform();
+    todoToRemove.findElement(by.css(".todo-list li button.destroy")).click();
+
+    expect(mainSection.isPresent()).toBe(false);
+  });
 });
