@@ -43,9 +43,9 @@ exports.config = {
 
   onPrepare: function() {
     //// SpecReporter
-    //var SpecReporter = require('jasmine-spec-reporter');
+    var SpecReporter = require('jasmine-spec-reporter');
     //jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'none'}));
-    //// jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+    jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 
     // debugging
     // console.log('browser.params:' + JSON.stringify(browser.params));
