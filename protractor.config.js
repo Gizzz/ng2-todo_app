@@ -9,12 +9,12 @@ exports.config = {
 	baseUrl: 'http://localhost:3000',
 	onPrepare: function() { 
 		var SpecReporter = require('jasmine-spec-reporter');
-    jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'none'}));
+    jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 	},
 	jasmineNodeOpts: {
     // defaultTimeoutInterval: 60000,
-    defaultTimeoutInterval: 15000,
-    // showTiming: true,
+		// extended interval for repl mode debugging
+    defaultTimeoutInterval: 600000,
     print: function() {}
   },
 };
