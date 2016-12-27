@@ -1,21 +1,17 @@
 import { browser, element, by, protractor } from 'protractor';
 
-describe("TodoApp", function () {
-  let todos = element.all(by.css("section.todoapp .todo-list li"));
+let todoApp = element(by.css("section.todoapp"));
+let todos = todoApp.elementArrayFinder_.all(by.css(".todo-list li"));
 
+describe("TodoApp", function () {
   beforeEach(function () {
     browser.get('');
 
     // remove todos from previous test
 
-    let mainSection = element(by.css("section.todoapp .main"));
-
-    mainSection.isPresent().then(isPresent => {
-      if (isPresent) {
-        let todoToRemove = browser.findElement(by.css(".todo-list li"));
-        // perform hover
-        browser.actions().mouseMove(todoToRemove).perform();
-        todoToRemove.findElement(by.css("button.destroy")).click();
+    todos.count().then(count => {
+      if (count) {
+        removeLastTodo();
       }
     });
 
@@ -24,39 +20,22 @@ describe("TodoApp", function () {
 
   it("should create new todo", function () {
     let expectedText = "tst";
-    let newTodoInput = element(by.css("section.todoapp .new-todo"));
-    newTodoInput.sendKeys(expectedText);
-    newTodoInput.sendKeys(protractor.Key.ENTER);
+    createTodo({ title: expectedText });
 
     expect(todos.count()).toBe(1);
     expect(todos.last().getText()).toBe(expectedText);
   });
 
   it("should remove todo", function () {
-    // create new todo
-
-    let expectedText = "tst";
-    let newTodoInput = element(by.css("section.todoapp .new-todo"));
-    newTodoInput.sendKeys(expectedText);
-    newTodoInput.sendKeys(protractor.Key.ENTER);
+    createTodo({ title: "tst" });
     expect(todos.count()).toBe(1);
 
-    // remove created todo
-
-    let todoToRemove = browser.findElement(by.css(".todo-list li"));
-    // perform hover
-    browser.actions().mouseMove(todoToRemove).perform();
-    todoToRemove.findElement(by.css("button.destroy")).click();
+    removeLastTodo();
     expect(todos.count()).toBe(0);
   });
 
   it("should mark todo as completed", function () {
-    // create new todo
-
-    let expectedText = "tst";
-    let newTodoInput = element(by.css("section.todoapp .new-todo"));
-    newTodoInput.sendKeys(expectedText);
-    newTodoInput.sendKeys(protractor.Key.ENTER);
+    createTodo({ title: "tst" });
     expect(todos.count()).toBe(1);
 
     let createdTodo = element(by.css(".todo-list li"));
@@ -68,22 +47,36 @@ describe("TodoApp", function () {
   });
 
   it("should mark todo as active", function () {
-    // create new todo
-
-    let expectedText = "tst";
-    let newTodoInput = element(by.css("section.todoapp .new-todo"));
-    newTodoInput.sendKeys(expectedText);
-    newTodoInput.sendKeys(protractor.Key.ENTER);
+    createTodo({ title: "tst", completed: true });
     expect(todos.count()).toBe(1);
 
-    let createdTodo = element(by.css(".todo-list li"));
-    let completedFlagElement = createdTodo.element(by.css("input.toggle"));
-    expect(completedFlagElement.isSelected()).toBe(false);
+    let createdTodo = todos.last();
+    let completedCheckbox = createdTodo.element(by.css("input.toggle"));
+    expect(completedCheckbox.isSelected()).toBe(true);
 
-    completedFlagElement.click();
-    expect(completedFlagElement.isSelected()).toBe(true);
-
-    completedFlagElement.click();
-    expect(completedFlagElement.isSelected()).toBe(false);
+    completedCheckbox.click();
+    expect(completedCheckbox.isSelected()).toBe(false);
   });
 });
+
+// helpers
+
+function createTodo(options: any): void {
+  let title = options.title;
+  let newTodoInput = todoApp.element(by.css(".new-todo"));
+  newTodoInput.sendKeys(title);
+  newTodoInput.sendKeys(protractor.Key.ENTER);
+
+  if (options.completed) {
+    let createdTodo = todos.last();
+    let completedCheckbox = createdTodo.element(by.css("input.toggle"));
+    completedCheckbox.click();
+  } 
+}
+
+function removeLastTodo(): void {
+  let todoToRemove = todos.last().getWebElement();
+  // perform hover
+  browser.actions().mouseMove(todoToRemove).perform();
+  todoToRemove.findElement(by.css("button.destroy")).click();
+}

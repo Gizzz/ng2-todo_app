@@ -12,8 +12,7 @@ exports.config = {
     jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 	},
 	jasmineNodeOpts: {
-    // defaultTimeoutInterval: 60000,
-		// extended interval for repl mode debugging
+		// extended interval for repl mode debugging; default is 60000
     defaultTimeoutInterval: 600000,
     print: function() {}
   },
