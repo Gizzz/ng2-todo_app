@@ -10,10 +10,10 @@ describe("TodoApp", function () {
   });
 
   afterEach(function () {
-    // remove todos from previous test
+    // delete todos from previous test
     todos.count().then(count => {
       for (let i = count; i > 0; i--) {
-        removeLastTodo();
+        deleteLastTodo();
       }
     });
   });
@@ -32,11 +32,11 @@ describe("TodoApp", function () {
       expect(todos.count()).toBe(0);
     });
 
-    it("should remove todo", function () {
+    it("should delete todo", function () {
       createTodo({ title: "tst" });
       expect(todos.count()).toBe(1);
 
-      removeLastTodo();
+      deleteLastTodo();
       expect(todos.count()).toBe(0);
     });
 
@@ -53,15 +53,15 @@ describe("TodoApp", function () {
 
       let lastTodo = todos.last();
       expect(lastTodo.element(by.css("label")).getText()).toBe(todoTitle_3);
-      removeLastTodo();
+      deleteLastTodo();
 
       lastTodo = todos.last();
       expect(lastTodo.element(by.css("label")).getText()).toBe(todoTitle_2);
-      removeLastTodo();
+      deleteLastTodo();
       
       lastTodo = todos.last();
       expect(lastTodo.element(by.css("label")).getText()).toBe(todoTitle_1);
-      removeLastTodo();
+      deleteLastTodo();
 
       expect(todos.count()).toBe(0);
     });
@@ -170,6 +170,8 @@ describe("TodoApp", function () {
       createTodo({ title: "1", completed: true });
       expect(clearCompleted_btn.isPresent()).toBe(true);
     });
+
+    // todo: add more clear-completed btn tests
   });
 });
 
@@ -188,9 +190,9 @@ function createTodo(todoOptions: any): void {
   } 
 }
 
-function removeLastTodo(): void {
-  let todoToRemove = todos.last().getWebElement();
+function deleteLastTodo(): void {
+  let todoToDelete = todos.last().getWebElement();
   // perform hover
-  browser.actions().mouseMove(todoToRemove).perform();
-  todoToRemove.findElement(by.css("button.destroy")).click();
+  browser.actions().mouseMove(todoToDelete).perform();
+  todoToDelete.findElement(by.css("button.destroy")).click();
 }
