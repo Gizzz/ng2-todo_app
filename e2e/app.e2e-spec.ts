@@ -92,6 +92,8 @@ describe("TodoApp", function () {
   });
 
   describe("completeAll button", function () {
+    let completeAll_btn = todoApp.element(by.css(".toggle-all"));
+
     it("should complete all todos if all active", function () {
       createTodo({ title: "1" });
       createTodo({ title: "2" });
@@ -104,8 +106,7 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(false);
       expect(completedCheckbox_2.isSelected()).toBe(false);
 
-      let completeAll = todoApp.element(by.css(".toggle-all"));
-      completeAll.click();
+      completeAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
@@ -125,8 +126,7 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(false);
 
-      let completeAll = todoApp.element(by.css(".toggle-all"));
-      completeAll.click();
+      completeAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
@@ -147,8 +147,7 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
 
-      let completeAll = todoApp.element(by.css(".toggle-all"));
-      completeAll.click();
+      completeAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(false);
       expect(completedCheckbox_2.isSelected()).toBe(false);
@@ -171,7 +170,30 @@ describe("TodoApp", function () {
       expect(clearCompleted_btn.isPresent()).toBe(true);
     });
 
-    // todo: add more clear-completed btn tests
+    it("should remove only comlpleted todos", function () {
+      createTodo({ title: "1", completed: false });
+      createTodo({ title: "2", completed: true });
+      expect(todos.count()).toBe(2);
+
+      expect(clearCompleted_btn.isPresent()).toBe(true);
+      clearCompleted_btn.click();
+
+      expect(todos.count()).toBe(1);
+      let todo = todos.first();
+      expect(todo.$(".view label").getText()).toBe("1");
+      expect(todo.$(".view input.toggle").isSelected()).toBe(false);
+    });
+
+    it("should remove all comlpleted todos", function () {
+      createTodo({ title: "1", completed: true });
+      createTodo({ title: "2", completed: true });
+      expect(todos.count()).toBe(2);
+
+      expect(clearCompleted_btn.isPresent()).toBe(true);
+      clearCompleted_btn.click();
+
+      expect(todos.count()).toBe(0);
+    });
   });
 });
 
