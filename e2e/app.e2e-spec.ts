@@ -1,4 +1,4 @@
-import { browser, by, element, protractor, $, $$ } from 'protractor';
+import { browser, by, element, ElementFinder, protractor, $, $$ } from 'protractor';
 
 let todoApp = element(by.css("section.todoapp"));
 let todos = todoApp.elementArrayFinder_.all(by.css(".todo-list li"));
@@ -39,7 +39,6 @@ describe("TodoApp", function () {
       deleteLastTodo();
       expect(todos.count()).toBe(0);
     });
-
 
     it("should create todos in subsequent order", function () {
       let todoTitle_1 = "todo title 1";
@@ -195,11 +194,57 @@ describe("TodoApp", function () {
       expect(todos.count()).toBe(0);
     });
   });
+
+  it("main section should not be visible when no todos", function () {
+    let mainSection = todoApp.$("section.main");
+    expect(mainSection.isPresent()).toBe(false);
+  });
+
+  it("main section should be visible when any todo", function () {
+    let mainSection = todoApp.$("section.main");
+    expect(mainSection.isPresent()).toBe(false);
+
+    let todo = createTodo({ title: "1" });
+    expect(mainSection.isDisplayed()).toBe(true);
+
+    let completedCheckbox = todo.$("input.toggle");
+    completedCheckbox.click();
+    
+    expect(mainSection.isDisplayed()).toBe(true);
+  });
+
+  it("'items left' text should display # of todos left correctly", function () {
+    let itemsLeft_element = todoApp.$("footer .todo-count");
+    expect(itemsLeft_element.isPresent()).toBe(false);
+
+    let todo_1 = createTodo({ title: "1" });
+    expect(itemsLeft_element.isDisplayed()).toBe(true);
+    expect(itemsLeft_element.getText()).toBe("1 item left");
+
+    createTodo({ title: "2" });
+    expect(itemsLeft_element.getText()).toBe("2 items left");
+
+    createTodo({ title: "3" });
+    expect(itemsLeft_element.getText()).toBe("3 items left");
+
+    deleteLastTodo();
+    expect(itemsLeft_element.getText()).toBe("2 items left");
+
+    deleteLastTodo();
+    expect(itemsLeft_element.getText()).toBe("1 item left");
+
+    let completedCheckbox_1 = todo_1.$("input.toggle");
+    completedCheckbox_1.click();
+    expect(itemsLeft_element.getText()).toBe("0 items left");
+
+    deleteLastTodo();
+    expect(itemsLeft_element.isPresent()).toBe(false);
+  });
 });
 
 // helpers
 
-function createTodo(todoOptions: any): void {
+function createTodo(todoOptions: any): ElementFinder {
   let title = todoOptions.title;
   let newTodoInput = todoApp.element(by.css(".new-todo"));
   newTodoInput.sendKeys(title);
@@ -210,6 +255,8 @@ function createTodo(todoOptions: any): void {
     let completedCheckbox = createdTodo.element(by.css("input.toggle"));
     completedCheckbox.click();
   } 
+
+  return todos.last();
 }
 
 function deleteLastTodo(): void {
