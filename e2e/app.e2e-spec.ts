@@ -2,6 +2,7 @@ import { browser, by, element, ElementFinder, protractor, $, $$ } from 'protract
 
 let todoApp = element(by.css("section.todoapp"));
 let todos = todoApp.elementArrayFinder_.all(by.css(".todo-list li"));
+let newTodo_input = todoApp.element(by.css(".new-todo"));
 let toggleAll_btn = todoApp.element(by.css(".toggle-all"));
 let clearCompleted_btn = todoApp.$("button.clear-completed");
 
@@ -25,7 +26,7 @@ describe("TodoApp", function () {
         }
       });
     })
-  });
+  });  
 
   describe("basic ops", function() {
     it("should create todo with title", function () {
@@ -200,6 +201,90 @@ describe("TodoApp", function () {
     });
   });
 
+  describe("todo editing", function () {
+    it("should enter editing mode on dblclick", function () {
+      let todo = createTodo({ title: "1" });
+      expect(todo.$(".view").isDisplayed()).toBe(true);
+      expect(todo.$(".edit").isDisplayed()).toBe(false);
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      expect(todo.$(".view").isDisplayed()).toBe(false);
+      expect(todo.$(".edit").isDisplayed()).toBe(true);
+    });
+
+    it("should save changes and leave on ENTER", function () {
+      let todo = createTodo({ title: "1" });
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      expect(todo.$(".view").isDisplayed()).toBe(false);
+      expect(todo.$(".edit").isDisplayed()).toBe(true);
+
+      todo.$(".edit").sendKeys("2");
+      todo.$(".edit").sendKeys(protractor.Key.ENTER);
+
+      expect(todo.$(".view").isDisplayed()).toBe(true);
+      expect(todo.$(".edit").isDisplayed()).toBe(false);
+
+      expect(todo.$(".view label").getText()).toBe("12");
+    });
+
+    it("should save changes and leave on blur", function () {
+      let todo = createTodo({ title: "1" });
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      expect(todo.$(".view").isDisplayed()).toBe(false);
+      expect(todo.$(".edit").isDisplayed()).toBe(true);
+      
+      todo.$(".edit").sendKeys("2");
+      todo.$(".edit").sendKeys(protractor.Key.ENTER);
+
+      // perform blur
+      newTodo_input.click();
+      expect(todo.$(".view").isDisplayed()).toBe(true);
+      expect(todo.$(".edit").isDisplayed()).toBe(false);
+
+      expect(todo.$(".view label").getText()).toBe("12");
+    });
+
+    it("should discard changes and leave on ESC", function () {
+      let todo = createTodo({ title: "1" });
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      expect(todo.$(".view").isDisplayed()).toBe(false);
+      expect(todo.$(".edit").isDisplayed()).toBe(true);
+
+      todo.$(".edit").sendKeys("2");
+      todo.$(".edit").sendKeys(protractor.Key.ESCAPE);
+      
+      expect(todo.$(".view").isDisplayed()).toBe(true);
+      expect(todo.$(".edit").isDisplayed()).toBe(false);
+
+      expect(todo.$(".view label").getText()).toBe("1");
+    });
+
+    it("should delete todo if title is empty", function () {
+      let todo = createTodo({ title: "1" });
+      expect(todos.count()).toBe(1);
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      todo.$(".edit").sendKeys(protractor.Key.BACK_SPACE);
+      todo.$(".edit").sendKeys(protractor.Key.ENTER);
+
+      expect(todos.count()).toBe(0);
+    });
+
+    it("should not delete empty todo if editing cancelled", function () {
+      let todo = createTodo({ title: "1" });
+      expect(todos.count()).toBe(1);
+
+      browser.actions().doubleClick(todo.getWebElement()).perform();
+      todo.$(".edit").sendKeys(protractor.Key.BACK_SPACE);
+      todo.$(".edit").sendKeys(protractor.Key.ESCAPE);
+
+      expect(todos.count()).toBe(1);
+    });
+  });
+
   describe("routing", function () {        
     it("should activate correct link if route is active", function () {
       let filters = todoApp.$(".footer .filters");
@@ -364,10 +449,9 @@ describe("TodoApp", function () {
 // helpers
 
 function createTodo(todoOptions: any): ElementFinder {
-  let title = todoOptions.title;
-  let newTodoInput = todoApp.element(by.css(".new-todo"));
-  newTodoInput.sendKeys(title);
-  newTodoInput.sendKeys(protractor.Key.ENTER);
+  let title = todoOptions.title;  
+  newTodo_input.sendKeys(title);
+  newTodo_input.sendKeys(protractor.Key.ENTER);
 
   if (todoOptions.completed) {
     let createdTodo = todos.last();
