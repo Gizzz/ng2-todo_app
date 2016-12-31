@@ -15,4 +15,4 @@ hacks:
 	but not appropriate for Model 
 - todo-data.service: find a way to eliminate this.todos hack (because of state sharing 
 	between todo component and service, see descr at file)
-
+- routing: when redirecting to root - "All" filter link doesn't get highlighted

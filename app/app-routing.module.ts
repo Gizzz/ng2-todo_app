@@ -7,7 +7,8 @@ const routes: Routes = [
 	{ path: '',  component: TodosComponent },
 	{ path: 'active', component: TodosComponent },
 	{ path: 'completed', component: TodosComponent },
-	// { path: '**', redirectTo: 'all' },
+	// minor bug: when redirecting to root - "All" filter link doesn't get highlighted
+	{ path: '**', redirectTo: '' },
 ];
 
 @NgModule({
