@@ -2,6 +2,8 @@ import { browser, by, element, ElementFinder, protractor, $, $$ } from 'protract
 
 let todoApp = element(by.css("section.todoapp"));
 let todos = todoApp.elementArrayFinder_.all(by.css(".todo-list li"));
+let toggleAll_btn = todoApp.element(by.css(".toggle-all"));
+let clearCompleted_btn = todoApp.$("button.clear-completed");
 
 describe("TodoApp", function () {
   beforeEach(function () {
@@ -11,11 +13,18 @@ describe("TodoApp", function () {
 
   afterEach(function () {
     // delete todos from previous test
-    todos.count().then(count => {
-      for (let i = count; i > 0; i--) {
-        deleteLastTodo();
+
+    browser.getCurrentUrl().then((currentUrl) => { 
+      if (currentUrl !== browser.baseUrl) {
+        browser.get('');
       }
-    });
+
+      todos.count().then(count => {
+        for (let i = count; i > 0; i--) {
+          deleteLastTodo();
+        }
+      });
+    })
   });
 
   describe("basic ops", function() {
@@ -90,9 +99,7 @@ describe("TodoApp", function () {
     });
   });
 
-  describe("completeAll button", function () {
-    let completeAll_btn = todoApp.element(by.css(".toggle-all"));
-
+  describe("toggleAll button", function () {    
     it("should complete all todos if all active", function () {
       createTodo({ title: "1" });
       createTodo({ title: "2" });
@@ -105,7 +112,7 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(false);
       expect(completedCheckbox_2.isSelected()).toBe(false);
 
-      completeAll_btn.click();
+      toggleAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
@@ -125,7 +132,7 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(false);
 
-      completeAll_btn.click();
+      toggleAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
@@ -146,16 +153,14 @@ describe("TodoApp", function () {
       expect(completedCheckbox_1.isSelected()).toBe(true);
       expect(completedCheckbox_2.isSelected()).toBe(true);
 
-      completeAll_btn.click();
+      toggleAll_btn.click();
 
       expect(completedCheckbox_1.isSelected()).toBe(false);
       expect(completedCheckbox_2.isSelected()).toBe(false);
     });
   });
 
-  describe("clearCompleted button", function () {
-    let clearCompleted_btn = todoApp.$("button.clear-completed");
-
+  describe("clearCompleted button", function () {    
     it("should not be visible if no completed todos", function () {
       expect(clearCompleted_btn.isPresent()).toBe(false);
 
@@ -169,7 +174,7 @@ describe("TodoApp", function () {
       expect(clearCompleted_btn.isPresent()).toBe(true);
     });
 
-    it("should remove only comlpleted todos", function () {
+    it("should remove only completed todos", function () {
       createTodo({ title: "1", completed: false });
       createTodo({ title: "2", completed: true });
       expect(todos.count()).toBe(2);
@@ -183,7 +188,7 @@ describe("TodoApp", function () {
       expect(todo.$(".view input.toggle").isSelected()).toBe(false);
     });
 
-    it("should remove all comlpleted todos", function () {
+    it("should remove all completed todos", function () {
       createTodo({ title: "1", completed: true });
       createTodo({ title: "2", completed: true });
       expect(todos.count()).toBe(2);
@@ -191,6 +196,118 @@ describe("TodoApp", function () {
       expect(clearCompleted_btn.isPresent()).toBe(true);
       clearCompleted_btn.click();
 
+      expect(todos.count()).toBe(0);
+    });
+  });
+
+  describe("routing", function () {        
+    it("should activate correct link if route is active", function () {
+      let filters = todoApp.$(".footer .filters");
+      let all_filterLink = filters.$$("li a").get(0);
+      let active_filterLink = filters.$$("li a").get(1);
+      let completed_filterLink = filters.$$("li a").get(2);
+
+      // without todos main section is not visible
+      createTodo({ title: "1" });
+
+      browser.get('');
+      expect(all_filterLink.getAttribute("class")).toBe("selected");
+      expect(active_filterLink.getAttribute("class")).toBe("");
+      expect(completed_filterLink.getAttribute("class")).toBe("");
+
+      browser.get('/active');
+      expect(all_filterLink.getAttribute("class")).toBe("");
+      expect(active_filterLink.getAttribute("class")).toBe("selected");
+      expect(completed_filterLink.getAttribute("class")).toBe("");
+
+      browser.get('/completed');
+      expect(all_filterLink.getAttribute("class")).toBe("");
+      expect(active_filterLink.getAttribute("class")).toBe("");
+      expect(completed_filterLink.getAttribute("class")).toBe("selected");
+    });
+
+    it("should display active todos at active page", function () {
+      createTodo({ title: "1" });
+      expect(todos.count()).toBe(1);
+      
+      browser.get('/active');
+      expect(todos.count()).toBe(1);
+
+      browser.get('/completed');
+      expect(todos.count()).toBe(0);
+    });
+
+    it("should display completed todos at completed page", function () {
+      createTodo({ title: "1", completed: true });
+      expect(todos.count()).toBe(1);
+      
+      browser.get('/active');
+      expect(todos.count()).toBe(0);
+
+      browser.get('/completed');
+      expect(todos.count()).toBe(1);
+    });
+
+    it("should move todo on toggle to appropriate page", function () {
+      let todo = createTodo({ title: "1" });
+
+      browser.get('/active');
+      expect(todos.count()).toBe(1);
+
+      // make todo completed
+      let completedCheckbox = todo.$("input.toggle");
+      completedCheckbox.click();
+      expect(todos.count()).toBe(0);
+
+      browser.get('/completed');
+      expect(todos.count()).toBe(1);
+
+      // make todo active
+      completedCheckbox.click();
+      expect(todos.count()).toBe(0);
+
+      browser.get('/active');
+      expect(todos.count()).toBe(1);
+    });
+
+    it("toggleAll button should move items from active to completed page", function () {
+      createTodo({ title: "1" });
+      createTodo({ title: "2" });
+      browser.get('/active');
+      expect(todos.count()).toBe(2);
+
+      toggleAll_btn.click();
+      expect(todos.count()).toBe(0);
+
+      browser.get('/completed');
+      expect(todos.count()).toBe(2);
+    });
+
+    it("toggleAll button should move items from completed to active page", function () {
+      createTodo({ title: "1", completed: true });
+      createTodo({ title: "2", completed: true });
+
+      browser.get('/completed');
+      expect(todos.count()).toBe(2);
+
+      toggleAll_btn.click();
+      expect(todos.count()).toBe(0);
+
+      browser.get('/active');
+      expect(todos.count()).toBe(2);
+    });
+
+    it("clearCompleted button should delete items from completed page", function () {
+      createTodo({ title: "1", completed: true });
+      createTodo({ title: "2", completed: true });
+
+      browser.get("/completed");
+      expect(todos.count()).toBe(2);
+      
+      clearCompleted_btn.click();
+      expect(todos.count()).toBe(0);
+
+      browser.get("");
       expect(todos.count()).toBe(0);
     });
   });
@@ -209,12 +326,14 @@ describe("TodoApp", function () {
 
     let completedCheckbox = todo.$("input.toggle");
     completedCheckbox.click();
-    
     expect(mainSection.isDisplayed()).toBe(true);
+
+    deleteLastTodo();
+    expect(mainSection.isPresent()).toBe(false);
   });
 
   it("'items left' text should display # of todos left correctly", function () {
-    let itemsLeft_element = todoApp.$("footer .todo-count");
+    let itemsLeft_element = todoApp.$(".footer .todo-count");
     expect(itemsLeft_element.isPresent()).toBe(false);
 
     let todo_1 = createTodo({ title: "1" });
