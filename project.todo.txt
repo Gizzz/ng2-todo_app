@@ -2,7 +2,6 @@ list of tasks for the project
 
 features:
 - e2e tests
-	- routing
 	- todo editing mode
 - decompose to components
 - make todos observable
