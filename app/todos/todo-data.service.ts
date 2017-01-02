@@ -77,6 +77,14 @@ export class TodoDataService {
 		this.todoStorageService.updateTodos(this.todos);
 	}
 
+	updateTitle(todo: Todo): void {
+		let todoToUpdate = this.todos.filter(t => t.id === todo.id)[0];
+		if (!todoToUpdate) return;
+
+		todoToUpdate.title = todo.title;
+		this.todoStorageService.updateTodos(this.todos);
+	}
+
 	deleteById(id: number): void {
 		let todoToDelete = this.todos.filter(item => item.id === id)[0];
 

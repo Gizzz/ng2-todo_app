@@ -1,8 +1,8 @@
 list of tasks for the project
 
 features:
-- decompose to components
 - make todos observable
+- e2e: storage persistance after reload
 
 bugs:
 -
@@ -14,3 +14,4 @@ hacks:
 - todo-data.service: find a way to eliminate this.todos hack (because of state sharing 
 	between todo component and service, see descr at file)
 - routing: when redirecting to root - "All" filter link doesn't get highlighted
+	(this is also present in reference solution)

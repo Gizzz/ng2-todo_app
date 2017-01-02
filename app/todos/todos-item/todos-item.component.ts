@@ -37,6 +37,7 @@ export class TodosItemComponent implements OnInit {
 		if (newValue) {
 			todo.title = newValue;
 			inputElement.value = todo.title;
+			this.todoDataService.updateTitle(todo);
 		} else {
 			this.todoDataService.deleteById(todo.id);
 			this.deleteItem.emit();
