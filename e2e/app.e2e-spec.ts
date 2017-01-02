@@ -28,7 +28,7 @@ describe("TodoApp", function () {
     })
   });  
 
-  xdescribe("basic ops", function() {
+  describe("basic ops", function() {
     it("should create todo with title", function () {
       let expectedText = "tst";
       createTodo({ title: expectedText });
@@ -42,12 +42,16 @@ describe("TodoApp", function () {
       expect(todos.count()).toBe(0);
     });
 
-    it("should delete todo", function () {
-      createTodo({ title: "tst" });
-      expect(todos.count()).toBe(1);
+    it("should create todo on blur if title is not empty", function () {
+      let headerTitle = todoApp.$(".header h1");
 
-      deleteLastTodo();
+      newTodo_input.sendKeys("");
+      headerTitle.click();
       expect(todos.count()).toBe(0);
+
+      newTodo_input.sendKeys("tst");
+      headerTitle.click();
+      expect(todos.count()).toBe(1);
     });
 
     it("should create todos in subsequent order", function () {
@@ -72,6 +76,14 @@ describe("TodoApp", function () {
       expect(lastTodo.element(by.css("label")).getText()).toBe(todoTitle_1);
       deleteLastTodo();
 
+      expect(todos.count()).toBe(0);
+    });
+
+    it("should delete todo", function () {
+      createTodo({ title: "tst" });
+      expect(todos.count()).toBe(1);
+
+      deleteLastTodo();
       expect(todos.count()).toBe(0);
     });
 
@@ -100,7 +112,7 @@ describe("TodoApp", function () {
     });
   });
 
-  xdescribe("toggleAll button", function () {    
+  describe("toggleAll button", function () {    
     it("should complete all todos if all active", function () {
       createTodo({ title: "1" });
       createTodo({ title: "2" });
@@ -161,7 +173,7 @@ describe("TodoApp", function () {
     });
   });
 
-  xdescribe("clearCompleted button", function () {    
+  describe("clearCompleted button", function () {    
     it("should not be visible if no completed todos", function () {
       expect(clearCompleted_btn.isPresent()).toBe(false);
 
@@ -201,7 +213,7 @@ describe("TodoApp", function () {
     });
   });
 
-  xdescribe("todo editing", function () {
+  describe("todo editing", function () {
     it("should enter editing mode on dblclick", function () {
       let todo = createTodo({ title: "1" });
       expect(todo.$(".view").isDisplayed()).toBe(true);
@@ -285,7 +297,7 @@ describe("TodoApp", function () {
     });
   });
 
-  xdescribe("routing", function () {        
+  describe("routing", function () {        
     it("should activate correct link if route is active", function () {
       let filters = todoApp.$(".footer .filters");
       let all_filterLink = filters.$$("li a").get(0);
