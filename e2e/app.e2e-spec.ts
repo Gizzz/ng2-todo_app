@@ -28,7 +28,7 @@ describe("TodoApp", function () {
     })
   });  
 
-  describe("basic ops", function() {
+  xdescribe("basic ops", function() {
     it("should create todo with title", function () {
       let expectedText = "tst";
       createTodo({ title: expectedText });
@@ -100,7 +100,7 @@ describe("TodoApp", function () {
     });
   });
 
-  describe("toggleAll button", function () {    
+  xdescribe("toggleAll button", function () {    
     it("should complete all todos if all active", function () {
       createTodo({ title: "1" });
       createTodo({ title: "2" });
@@ -161,7 +161,7 @@ describe("TodoApp", function () {
     });
   });
 
-  describe("clearCompleted button", function () {    
+  xdescribe("clearCompleted button", function () {    
     it("should not be visible if no completed todos", function () {
       expect(clearCompleted_btn.isPresent()).toBe(false);
 
@@ -201,7 +201,7 @@ describe("TodoApp", function () {
     });
   });
 
-  describe("todo editing", function () {
+  xdescribe("todo editing", function () {
     it("should enter editing mode on dblclick", function () {
       let todo = createTodo({ title: "1" });
       expect(todo.$(".view").isDisplayed()).toBe(true);
@@ -285,7 +285,7 @@ describe("TodoApp", function () {
     });
   });
 
-  describe("routing", function () {        
+  xdescribe("routing", function () {        
     it("should activate correct link if route is active", function () {
       let filters = todoApp.$(".footer .filters");
       let all_filterLink = filters.$$("li a").get(0);
@@ -397,24 +397,32 @@ describe("TodoApp", function () {
     });
   });
 
-  it("main section should not be visible when no todos", function () {
+  it("main section and footer should not be visible when no todos", function () {
     let mainSection = todoApp.$("section.main");
+    let footer = todoApp.$(".footer");
+
     expect(mainSection.isPresent()).toBe(false);
+    expect(footer.isPresent()).toBe(false);
   });
 
-  it("main section should be visible when any todo", function () {
+  it("main section and footer should be visible when any todo", function () {
     let mainSection = todoApp.$("section.main");
+    let footer = todoApp.$(".footer");
     expect(mainSection.isPresent()).toBe(false);
+    expect(footer.isPresent()).toBe(false);
 
     let todo = createTodo({ title: "1" });
     expect(mainSection.isDisplayed()).toBe(true);
+    expect(footer.isDisplayed()).toBe(true);
 
     let completedCheckbox = todo.$("input.toggle");
     completedCheckbox.click();
     expect(mainSection.isDisplayed()).toBe(true);
+    expect(footer.isDisplayed()).toBe(true);
 
     deleteLastTodo();
     expect(mainSection.isPresent()).toBe(false);
+    expect(footer.isPresent()).toBe(false);
   });
 
   it("'items left' text should display # of todos left correctly", function () {
