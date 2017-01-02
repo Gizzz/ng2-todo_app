@@ -71,6 +71,7 @@ export class TodoDataService {
 			id: newId,
 			title,
 			completed: false,
+			editing: false,
 		};
 
 		this.todos.push(todoToCreate);
