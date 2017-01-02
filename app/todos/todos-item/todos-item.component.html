@@ -1,0 +1,13 @@
+<li [ngClass]="{completed: todo.completed, editing: todo.editing}">
+	<div class="view">
+		<input type="checkbox" class="toggle" 
+			[ngModel]="todo.completed" 
+			(ngModelChange)="toggle_SingleTodo_CompletedState(todo.id)">
+		<label (dblclick)="startTodoEditing(todo)">{{ todo.title }}</label>
+		<button class="destroy" (click)="deleteTodo(todo.id)"></button>
+	</div>
+	<input class="edit input-{{ todo.id }}" value="{{ todo.title }}"
+		(keyup.enter)="saveEditingChanges(todo)" 
+		(blur)="saveEditingChanges(todo)"
+		(keyup.escape)="discardEditingChanges(todo)">
+</li>

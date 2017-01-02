@@ -13,19 +13,10 @@
 			(ngModelChange)="toggleAllTodosCompletedState(toggleAll.checked)">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul class="todo-list">
-			<li *ngFor="let todo of todos" [ngClass]="{completed: todo.completed, editing: todo.editing}">
-				<div class="view">
-					<input type="checkbox" class="toggle" 
-						[ngModel]="todo.completed" 
-						(ngModelChange)="toggle_SingleTodo_CompletedState(todo.id)">
-					<label (dblclick)="startTodoEditing(todo)">{{ todo.title }}</label>
-					<button class="destroy" (click)="deleteTodo(todo.id)"></button>
-				</div>
-				<input class="edit input-{{ todo.id }}" value="{{ todo.title }}"
-					(keyup.enter)="saveEditingChanges(todo)" 
-					(blur)="saveEditingChanges(todo)"
-					(keyup.escape)="discardEditingChanges(todo)">
-			</li>
+			<my-todos-item *ngFor="let todo of todos" [todo]="todo" 
+				(itemStateChange)="refreshTodos()"
+				(deleteItem)="refreshTodos()">
+			</my-todos-item>
 		</ul>		
 	</section>	
 	

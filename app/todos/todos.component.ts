@@ -29,8 +29,6 @@ export class TodosComponent implements OnInit {
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
-	// header
-
 	get toggleAll_controlState(): boolean {
 		let isAllTodosCompleted: boolean = 
 			this.todoDataService.getTodosCount("completed") === this.todoDataService.getTodosCount();
@@ -38,19 +36,12 @@ export class TodosComponent implements OnInit {
 		return isAllTodosCompleted;
 	}
 
-	toggleAllTodosCompletedState(value: boolean) {
-		this.todoDataService.toggleCompletedForAll(value);
-		this.todos = this.todoDataService.getTodos(this.filter);
-	}
-
-	// main
-
 	get overallTodosCount(): number {
 		return this.todoDataService.getTodosCount();
 	}
 
-	deleteTodo(id: number): void {
-		this.todoDataService.deleteById(id); 
+	toggleAllTodosCompletedState(value: boolean) {
+		this.todoDataService.toggleCompletedForAll(value);
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
 
@@ -58,40 +49,6 @@ export class TodosComponent implements OnInit {
 		this.todoDataService.create(title); 
 		this.todos = this.todoDataService.getTodos(this.filter);
 	}
-
-	toggle_SingleTodo_CompletedState(id: number): void {
-		this.todoDataService.toggleCompletedById(id);
-		this.todos = this.todoDataService.getTodos(this.filter);
-	}
-
-	startTodoEditing(todo: any): void {
-		todo.editing = true;
-
-		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
-		setTimeout(() => { inputElement.focus(); })
-	}
-
-	saveEditingChanges(todo: any): void {
-		todo.editing = false;
-
-		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
-		let newValue: string = inputElement.value.trim()
-
-		if (newValue) {
-			todo.title = newValue;
-			inputElement.value = todo.title;
-		} else {
-			this.todoDataService.deleteById(todo.id);
-		}
-	}
-
-	discardEditingChanges(todo: any): void {
-		todo.editing = false;
-
-		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
-		inputElement.value = todo.title;
-	}
-
 
 	refreshTodos(): void {
 		this.todos = this.todoDataService.getTodos(this.filter);
