@@ -21,14 +21,14 @@ export class TodosItemComponent implements OnInit {
 		this.itemStateChange.emit();
 	}
 
-	startTodoEditing(todo: any): void {
+	startTodoEditing(todo: Todo): void {
 		todo.editing = true;
 
 		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
 		setTimeout(() => { inputElement.focus(); })
 	}
 
-	saveEditingChanges(todo: any): void {
+	saveEditingChanges(todo: Todo): void {
 		todo.editing = false;
 
 		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
@@ -44,7 +44,7 @@ export class TodosItemComponent implements OnInit {
 		}
 	}
 
-	discardEditingChanges(todo: any): void {
+	discardEditingChanges(todo: Todo): void {
 		todo.editing = false;
 
 		let inputElement: HTMLInputElement = <HTMLInputElement>document.querySelector(`.input-${ todo.id }`);
