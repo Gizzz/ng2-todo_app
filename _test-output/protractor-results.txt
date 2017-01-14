@@ -1,0 +1,11 @@
+Protractor results for: 12/26/2016, 3:05:18 PM
+
+AppDir:./
+  Suite: TodoApp -- failed
+    failed - should create new todo
+      message: Failed: bar!
+    failed - should remove todo
+      message: Expected 0 to be 1.
+      message: Expected false to be true.
+      message: Failed: No element found using locator: By(css selector, .todo-list li)
+
