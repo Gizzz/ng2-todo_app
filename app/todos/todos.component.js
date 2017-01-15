@@ -1,0 +1,66 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var todo_data_service_1 = require("./todo-data.service");
+var TodosComponent = (function () {
+    function TodosComponent(todoDataService, route, router) {
+        this.todoDataService = todoDataService;
+        this.route = route;
+        this.router = router;
+    }
+    TodosComponent.prototype.ngOnInit = function () {
+        this.filter = "";
+        if (this.route.snapshot.url.length) {
+            this.filter = this.route.snapshot.url[0].path;
+        }
+        this.todos = this.todoDataService.getTodos(this.filter);
+    };
+    Object.defineProperty(TodosComponent.prototype, "toggleAll_controlState", {
+        get: function () {
+            var isAllTodosCompleted = this.todoDataService.getTodosCount("completed") === this.todoDataService.getTodosCount();
+            return isAllTodosCompleted;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TodosComponent.prototype, "overallTodosCount", {
+        get: function () {
+            return this.todoDataService.getTodosCount();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TodosComponent.prototype.toggleAllTodosCompletedState = function (value) {
+        this.todoDataService.toggleCompletedForAll(value);
+        this.todos = this.todoDataService.getTodos(this.filter);
+    };
+    TodosComponent.prototype.createTodo = function (title) {
+        this.todoDataService.create(title);
+        this.todos = this.todoDataService.getTodos(this.filter);
+    };
+    TodosComponent.prototype.refreshTodos = function () {
+        this.todos = this.todoDataService.getTodos(this.filter);
+    };
+    return TodosComponent;
+}());
+TodosComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'my-todos',
+        templateUrl: 'todos.component.html',
+    }),
+    __metadata("design:paramtypes", [todo_data_service_1.TodoDataService,
+        router_1.ActivatedRoute,
+        router_1.Router])
+], TodosComponent);
+exports.TodosComponent = TodosComponent;
+//# sourceMappingURL=todos.component.js.map

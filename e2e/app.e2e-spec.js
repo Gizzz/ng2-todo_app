@@ -1,5 +1,5 @@
 "use strict";
-var protractor_1 = require('protractor');
+var protractor_1 = require("protractor");
 var todoApp = protractor_1.element(protractor_1.by.css("section.todoapp"));
 var todos = todoApp.elementArrayFinder_.all(protractor_1.by.css(".todo-list li"));
 var newTodo_input = todoApp.element(protractor_1.by.css(".new-todo"));
