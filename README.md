@@ -93,7 +93,7 @@ Here are the test related scripts:
 * `npm test` - compiles, runs and watches the karma unit tests
 * `npm run e2e` - run protractor e2e tests, written in JavaScript (*e2e-spec.js)
 
-### End-to-end (E2E) Tests
+## End-to-end (E2E) Tests
 
 E2E tests are in the `e2e` directory, side by side with the `app` folder.
 Their filenames must end in `.e2e-spec.ts`.
